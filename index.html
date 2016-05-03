@@ -4,16 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<!-- <link rel="stylesheet" href="C:\Users\acowell\Downloads\dev_tools\bootstrap-3.3.6\bootstrap-3.3.6\dist\css\bootstrap.min.css">
-<link rel="stylesheet" href="C:\Users\acowell\Downloads\dev_tools\bootstrap-3.3.6\bootstrap-3.3.6\dist\css\bootstrap-theme.min.css"> -->
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>blah</title>
+
+    <title>DEMO</title>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,7 +28,7 @@
           <li><a data-toggle="tab" id="searchTab" href="#search-container">SEARCH</a></li>
           <li><a data-toggle="tab" id="myTab" href="#my-container">MY FAVES</a></li>
         </ul>
-        <button id="btnLoad" class="btn btn-danger" type="button">Authenticate</button>
+        <button id="signin" class="btn btn-danger" type="button">Sign-in</button>
 
         <div id="search-controls">
         <div class="row">
@@ -78,11 +76,7 @@
                 </div>
                 <div class="modal-body">
                 <!-- embed video here -->
-                    <div id="video" class="embed-responsive embed-responsive-16by9">
-                    <!-- <iframe width="640" height="360" src="http://www.youtube.com/embed/Jer8XjMrUB4" frameborder="0" allowfullscreen></iframe> -->
-                    <!-- <iframe class="embed-responsive-item" src="" allowfullscreen></iframe>-->
-                    </div>
-                    <!-- <div id="modal-info"> -->
+                    <div id="video" class="embed-responsive embed-responsive-16by9"></div>
                     <div class="row">
                      <div class="col-xs-6">
                       <ul class="nav nav-tabs">
@@ -94,23 +88,21 @@
                       <div id="fave" class="checkbox"></div>
                     </div>
                   </div>
-                      <div id="modalTabs" class="tab-content">
-                        <div id="statsTab" class="tab-pane fade in active tab">
-                          <p id="channel" class="col-xs-6"></p>
-                          <p id="likes" class="col-xs-6"></p>
-                          <p id="views" class="col-xs-6"></p>
-                          <p id="dislikes" class="col-xs-6"></p>
-                        </div>
-                        <div id="commentsTab" class="tab-pane fade tab">
-                          <label for="comments"><b>What people are saying...</b></label>
-                          <div class="col-xs-11" style="height: 100px; overflow-y: scroll;">
-                            <ul id="comments"></ul>
-                          </div>
-                        </div>
-
+                  <div id="modalTabs" class="tab-content">
+                    <div id="statsTab" class="tab-pane fade in active tab">
+                      <p id="channel" class="col-xs-6"></p>
+                      <p id="likes" class="col-xs-6"></p>
+                      <p id="views" class="col-xs-6"></p>
+                      <p id="dislikes" class="col-xs-6"></p>
+                    </div>
+                    <div id="commentsTab" class="tab-pane fade tab">
+                      <label for="comments"><b>What people are saying...</b></label>
+                      <div class="col-xs-11" style="height: 100px; overflow-y: scroll;">
+                        <ul id="comments"></ul>
                       </div>
- <!-- tab-content -->
-                    <!-- </div>  -->
+                    </div>
+
+                  </div> <!-- tab-content -->
                 </div> <!-- modal-body -->
                 <div class="modal-footer">
                     <button id="modalClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -122,18 +114,18 @@
     </section>
       <!-- google client library for authN/Z -->
       <script src="https://apis.google.com/js/client.js"></script>
-      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <!-- jQuery -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-      <!-- Include all compiled plugins (below), or include individual files as needed -->
       <!-- Latest compiled and minified JavaScript -->
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+      <!-- my stuffs -->
       <script src="js/favorites.js"></script>
       <script src="js/common.js"></script>
       <script src="js/search.js"></script>
       <script src="js/trending.js"></script>
       <script src="js/auth.js"></script>
 
-      <!-- load the trending videos on page load-->
+      <!-- load the trending videos on page load -->
       <script>
         $( document ).ready(function() {
             loadTrending();
