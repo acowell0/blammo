@@ -1,10 +1,16 @@
-var clientId = '206932619037-ck9ljfqts067tn3okm6llomlfc2m22ri.apps.googleusercontent.com';
-var scopes = 'https://www.googleapis.com/auth/youtube';
-// https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly";
-var token;
-var authenticated = false;
+var init = function(){
+  init.authenticated = false;
+  init.favePlaylistId;
+  init.faves = [];
+}
 
 var auth = function() {
+    init();
+    auth.token;
+    var favePlaylistTitle = 'acowell-apidemo-faves';
+    var clientId = '206932619037-ck9ljfqts067tn3okm6llomlfc2m22ri.apps.googleusercontent.com';
+    var scopes = 'https://www.googleapis.com/auth/youtube';
+    // https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly";
     var config = {
       'client_id': clientId,
       'scope': scopes,
@@ -15,33 +21,36 @@ var auth = function() {
       $('#signin').hide();
       $('#signout').show();
       console.log("login complete");
-      authenticated = true;
+      init.authenticated = true;
       // hide sign in message
       $('#my-container').find('h3').hide();
-      token = gapi.auth.getToken();
-      console.log(token);
-      console.log("access token: " + token.access_token);
+      auth.token = gapi.auth.getToken();
+      // console.log(auth.token);
+      console.log("access token: " + auth.token.access_token);
 
       // get list of playlists, we just need id and title
-      var apiUrl = 'https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&fields=items(id%2Csnippet%2Ftitle)&access_token=' + token.access_token;
+      var apiUrl = 'https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&fields=items';
+      apiUrl += '(id%2Csnippet%2Ftitle)&access_token=' + auth.token.access_token;
 
       // call playlist api
       $.getJSON(apiUrl, function(response){
-        console.log('get list of playlists response:'+response);
+        // console.log('get list of playlists response:'+response);
+
         // look for playlist title, if found, store playlist id
         for(i=0; i<response.items.length; i++){
           if(response.items[i].snippet.title === favePlaylistTitle){
-            favePlaylistId = response.items[i].id;
-            console.log("playlist id: "+favePlaylistId);
+            init.favePlaylistId = response.items[i].id;
+            // console.log("playlist id: "+init.favePlaylistId);
+
             // get list of videos in fave playlist
-            getFaves();
+            getFaves(init.favePlaylistId);
           }
         }
 
         // if playlist not found, create it
-        if (typeof favePlaylistId == 'undefined') {
+        if (typeof init.favePlaylistId == 'undefined') {
           console.log("playlist ["+favePlaylistTitle+"] not found");
-          createPlaylist();
+          createPlaylist(favePlaylistTitle);
         }
       });
 
@@ -54,7 +63,7 @@ $('#signin').click(function(){
 });
 
 $('#signout').click(function(){
-  var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' + token.access_token;
+  var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' + auth.token.access_token;
 
     $.ajax({
         type: 'GET',
@@ -63,9 +72,8 @@ $('#signout').click(function(){
         contentType: "application/json",
         dataType: 'jsonp',
         success: function (response) {
-            authenticated = false;
-            // Do something now that user is disconnected
-            // The response is always undefined.
+            init.authenticated = false;
+
             $('#signout').hide();
             $('#signin').show();
             // clear faves tab
@@ -74,11 +82,12 @@ $('#signout').click(function(){
             $('#my-container').find('h3').show();
 
             // clear faves array
-            faves = [];
-            favePlaylistId=undefined;
+            init.faves = [];
+            init.favePlaylistId=undefined;
             console.log("sign-out successful");
         },
         error: function (e) {
+            alert("Sign-out unsuccessful. See log for details.");
             console.log(e);
         }
     });

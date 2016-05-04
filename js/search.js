@@ -1,22 +1,29 @@
-var searchKey = "s";
-
+// clear search results and input controls
 $('#btnClear').click(function(){
-  clearResultsList($('#searchResults'), searchKey);
+  clearResultsList($('#searchResults'), 's');
+  $('#lat').val('');
+  $('#long').val('');
+  $('#radius').val('');
+  $('#inputSearch').val('');
+  // reset selects to first option
+  $('#selUnit option')[0].selected = true;
+  $('#selSort option')[0].selected = true;
+  $('#selMaxResults option')[0].selected = true;
 });
 
 $('#btnSearch').click(function(){
-  var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&';
+  var searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=%%%maxRes%%%&';
   searchUrl += 'order=%%%order%%%&q=%%%query%%%&type=video&';
   searchUrl += 'fields=items(id%2Csnippet%2Ftitle%2Csnippet%2Fdescription%2Csnippet%2Fthumbnails%2Fdefault%2Furl)';
   searchUrl += '&key=AIzaSyAgNqfgP847pRTGlFzhirgATebC768fxbY';
 
   // if geo controls are active, get values
-  if($('#geo').is(":checked")){
+  if($('#geo').is(':checked')){
     //TODO: validate these params!!!!!
-    var latitude = $("#lat").val();
-    var longitude = $("#long").val();
-    var radius = $("#radius").val();
-    var unit = $("#selUnit").find('option:selected').val();
+    var latitude = $('#lat').val();
+    var longitude = $('#long').val();
+    var radius = $('#radius').val();
+    var unit = $('#selUnit').find('option:selected').val();
 
     // add geo params to search url
     // must add both location and locationRadius
@@ -27,20 +34,20 @@ $('#btnSearch').click(function(){
   }
 
   // clear previous search results
-  clearResultsList($('#searchResults'), searchKey);
-  console.log($('#selSort').find('option:selected').val());
+  clearResultsList($('#searchResults'), 's');
 
   searchUrl = searchUrl.replace('%%%order%%%', $('#selSort').find('option:selected').val());
-  console.log(searchUrl);
+  searchUrl = searchUrl.replace('%%%maxRes%%%',$('#selMaxResults').find('option:selected').val());
 
+  //TODO: validate query input?
   var searchString = $('#inputSearch').val();
-  console.log(searchString);
+
   // replace spaces with +
   searchUrl = searchUrl.replace('%%%query%%%', searchString.split(' ').join('+'));
   console.log(searchUrl);
 
   // populate list of search results into search results div
-  populateResults(searchUrl, $('#searchResults'), searchKey);
+  populateResults(searchUrl, $('#searchResults'), 's');
 
 });
 
