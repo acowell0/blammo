@@ -1,9 +1,22 @@
-/*.row > div {
-    background-color: lightblue;
-    box-shadow: inset 1px -1px 1px gray, inset -1px 1px 1px gray;
-}*/
-#signin {
+#signin, #signout {
   float: right;
+  color: white;
+}
+
+#signin:hover, #signout:hover {
+  color: #f0ad4e;
+}
+
+#signout {
+  display: none;
+}
+
+#lat, #long, #radius, #selUnit, #lblUnit {
+  display: none;
+}
+
+#divRadius {
+  margin-top: 28px;
 }
 
 .tab {
@@ -13,10 +26,12 @@
 .nav {
   margin-left: 50px;
 }
+
 #comments > li,
-label{
+label {
   color: white;
 }
+
 header {
   background-color: #323330;
   width: 100%;
@@ -28,16 +43,9 @@ header {
   position: fixed;
 }
 
-.subheader {
-  background-color: #C8FA02;
-}
-
 .modal-body {
   background-color: #323330;
 }
-/*#statsTab {
-  background-color: lightblue;
-}*/
 
 .modal-header {
   background-color: #323330;
@@ -48,8 +56,8 @@ header {
 .close {
   color: white;
   opacity: .8;
-  /*text-shadow: 0 1px 0 #f0ad4e;*/
 }
+
 .close:hover,
 .close:focus {
   color: #f0ad4e;
@@ -67,9 +75,12 @@ header {
   margin-left: 50px;
 }
 
-#search-container{
-  margin-top: 190px;
-    /*background-color: lightblue;*/
+#search-container {
+  margin-top: 200px;
+}
+
+#trending-container {
+  margin-top: 150px;
 }
 
 #statsTab > p {
@@ -79,7 +90,9 @@ header {
 header > h1 {
   color: white;
   margin-left: 50px;
+  margin-bottom: auto;
 }
+
 #faveResults {
   margin-top: 150px;
 }
@@ -89,6 +102,7 @@ header > h1 {
   background-color: transparent;
   color: white;
 }
+
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
@@ -100,11 +114,9 @@ header > h1 {
   background-color: transparent;
 }
 
-
 .nav-tabs {
   border-bottom: 1px solid transparent;
 }
-
 
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
@@ -114,22 +126,15 @@ header > h1 {
   border: 1px solid transparent;
   border-bottom-color: transparent;
   font-weight: bold;
-  /*font-style: italic;*/
 }
 
 .nav-tabs > li > a:hover {
   border-color: transparent;
 }
 
-/*body {
-  background-color: #C0C3C4;
-}*/
-
-
 section {
-    margin-top: 115px;
+    margin-top: auto;
     margin-bottom: 110px;
-    /*background-color: #C0C3C4;*/
 }
 
 footer {

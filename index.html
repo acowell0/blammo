@@ -28,7 +28,8 @@
           <li><a data-toggle="tab" id="searchTab" href="#search-container">SEARCH</a></li>
           <li><a data-toggle="tab" id="myTab" href="#my-container">MY FAVES</a></li>
         </ul>
-        <button id="signin" class="btn btn-danger" type="button">Sign-in</button>
+        <button id="signin" class="btn btn-link" type="button">SIGN-IN</button>
+        <button id="signout" class="btn btn-link" type="button">SIGN-OUT</button>
 
         <div id="search-controls">
         <div class="row">
@@ -37,6 +38,21 @@
           </div>
           <div class="col-xs-4">
             <button id="btnSearch" class="btn btn-warning" type="button">Search</button> <button id="btnClear" class="btn btn-default" type="button">Clear</button>
+          </div>
+          <div class="col-xs-4">
+            <label><input id="geo" type="checkbox" > Geo</label>
+            <input id="lat" type="text" class="form-control" placeholder="enter latitude...">
+            <input id="long" type="text" class="form-control" placeholder="enter longitude...">
+          </div>
+          <div id="divRadius" class="col-xs-4">
+            <input id="radius" type="number" class="form-control" placeholder="enter search radius...">
+            <label id="lblUnit" for="selUnit">Unit:</label>
+            <select id="selUnit">
+              <option value="m">Meters</option>
+              <option value="km">Kilometers</option>
+              <option value="ft">Feet</option>
+              <option value="mi">Miles</option>
+            </select>
           </div>
         </div>
         <div class="row">

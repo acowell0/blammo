@@ -3,11 +3,13 @@ var favePlaylistId;
 var favePlaylistTitle = 'acowell-apidemo-faves';
 
 var playlistURL = 'https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&fields=items(id%2Csnippet%2Ftitle)';
-var faveURL = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=PL7IqxzEawLIQ30fSBmbHqbl4oRSVHUr6Z&fields=items(id%2Csnippet%2Ftitle%2Csnippet%2Fdescription%2Csnippet%2FresourceId%2FvideoId%2Csnippet%2Fthumbnails%2Fdefault%2Furl)&access_token=';
 var faves = [];
 
 // get list of videos in fave playlist
 var getFaves = function () {
+  // max results = 20
+  var faveURL = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=20&playlistId=%%%playlist%%%&fields=items(id%2Csnippet%2Ftitle%2Csnippet%2Fdescription%2Csnippet%2FresourceId%2FvideoId%2Csnippet%2Fthumbnails%2Fdefault%2Furl)&access_token=';
+
   faveURL = faveURL.replace('%%%playlist%%%', favePlaylistId);
   faveURL = faveURL+ token.access_token;
 
@@ -52,11 +54,11 @@ var addFave = function(videoId){
         console.log("successful insertion");
         // update array with valid playlist item id
         updateFavesArray(response, videoId);
-
+        console.log("after update faves array");
         // add to the DOM
         addFaveToDOM(response, $('#faveResults'), videoId);
-
       },
+      
       error: function(response) {
         console.log("error occurred trying to insert playlist item: " + videoId);
         console.log(response);
@@ -74,9 +76,14 @@ var updateFavesArray = function(response, videoId){
 }
 
 var addFaveToDOM = function(resp, container, videoId){
-  // note: we only expect 1 object returned, so there is no items array in response
+  // note: we only expect 1 object returned, so there is no items array in resp
 
-  var htmlMediaList = $('<ul id="f" class="media-list"></ul>');
+  // only add the media list ul if it doesn't already exist
+  if($(container).find('ul').length == 0){
+    var htmlMediaList = $('<ul id="f" class="media-list"></ul>');
+    console.log("media list doesn't exist, so add it");
+    $(container).append(htmlMediaList);
+  }
   var htmlListItem = '<li class="media f" data-video="'+ videoId + '">';
   htmlListItem += '<a class="media-left" href="#">';
   htmlListItem += '<img class="media-object" src="' + resp.snippet.thumbnails.default.url + '" >';
@@ -172,8 +179,27 @@ var removeFave = function(videoId){
 }
 
 // create the acowell-apidemo-faves playlist
-var addPlaylist = function(){
+var createPlaylist = function(){
+  var insertPlaylistURL = 'https://www.googleapis.com/youtube/v3/playlists?part=snippet%2C+status&fields=id&access_token=' + token.access_token;
+  var data = '{ "snippet": { "title": "'+favePlaylistTitle+'", ';
+  data += '"description": "A private playlist created with the YouTube API used by the blammo JavaScript demo" }, ';
+  data += '"status": { "privacyStatus": "private" } }';
 
+  $.ajax({
+    type: 'POST',
+    url: insertPlaylistURL,
+    contentType:'application/json; charset=utf-8',
+    data: data,
+    dataType: 'json',
+    success: function(response) {
+      console.log("playlist successfully created: " + response.id);
+      favePlaylistId = response.id;
+    },
+    error: function(response) {
+      console.log("error occurred trying to create playlist");
+      console.log(response);
+    }
+  });
 }
 
 

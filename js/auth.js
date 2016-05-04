@@ -7,15 +7,17 @@ var authenticated = false;
 var auth = function() {
     var config = {
       'client_id': clientId,
-      'scope': scopes
+      'scope': scopes,
+      'immediate' : false
     };
 
     gapi.auth.authorize(config, function() {
+      $('#signin').hide();
+      $('#signout').show();
       console.log("login complete");
       authenticated = true;
-      // hide sign in message and button
+      // hide sign in message
       $('#my-container').find('h3').hide();
-      $('#btnLoad').hide();
       token = gapi.auth.getToken();
       console.log(token);
       console.log("access token: " + token.access_token);
@@ -25,7 +27,7 @@ var auth = function() {
 
       // call playlist api
       $.getJSON(apiUrl, function(response){
-        console.log(response);
+        console.log('get list of playlists response:'+response);
         // look for playlist title, if found, store playlist id
         for(i=0; i<response.items.length; i++){
           if(response.items[i].snippet.title === favePlaylistTitle){
@@ -35,11 +37,46 @@ var auth = function() {
             getFaves();
           }
         }
+
+        // if playlist not found, create it
+        if (typeof favePlaylistId == 'undefined') {
+          console.log("playlist ["+favePlaylistTitle+"] not found");
+          createPlaylist();
+        }
       });
 
     });
 };
 
-$('#btnLoad').click(function(){
-  auth()
+$('#signin').click(function(){
+  auth();
+
+});
+
+$('#signout').click(function(){
+  var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' + token.access_token;
+
+    $.ajax({
+        type: 'GET',
+        url: revokeUrl,
+        async: false,
+        contentType: "application/json",
+        dataType: 'jsonp',
+        success: function (response) {
+            authenticated = false;
+            // Do something now that user is disconnected
+            // The response is always undefined.
+            $('#signout').hide();
+            $('#signin').show();
+            // clear faves tab
+            clearResultsList($('#faveResults'), "f");
+            // show sign in message
+            $('#my-container').find('h3').show();
+            console.log("sign-out successful");
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+
 });

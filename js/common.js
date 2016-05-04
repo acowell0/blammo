@@ -1,12 +1,13 @@
-var htmlMediaList;
-
 // common function to populate api results list
 var populateResults = function (apiUrl, targetContainer, resultsType){
-  htmlMediaList = $('<ul id="'+resultsType+'" class="media-list"></ul>');
-
+  
   $.getJSON(apiUrl, function(response){
-    // add the media list
-    $(targetContainer).append(htmlMediaList);
+    // add the media list if it doesn't already exist
+    if($(targetContainer).find('ul').length == 0){
+      var htmlMediaList = $('<ul id="'+resultsType+'" class="media-list"></ul>');
+      console.log("media list doesn't exist, so add it");
+      $(targetContainer).append(htmlMediaList);
+    }
     console.log(response);
     console.log(response.items.length);
 
