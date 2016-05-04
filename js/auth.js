@@ -72,6 +72,10 @@ $('#signout').click(function(){
             clearResultsList($('#faveResults'), "f");
             // show sign in message
             $('#my-container').find('h3').show();
+
+            // clear faves array
+            faves = [];
+            favePlaylistId=undefined;
             console.log("sign-out successful");
         },
         error: function (e) {
