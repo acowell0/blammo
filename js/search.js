@@ -19,17 +19,23 @@ $('#btnSearch').click(function(){
 
   // if geo controls are active, get values
   if($('#geo').is(':checked')){
-    //TODO: validate these params!!!!!
     var latitude = $('#lat').val();
     var longitude = $('#long').val();
     var radius = $('#radius').val();
     var unit = $('#selUnit').find('option:selected').val();
 
-    // add geo params to search url
-    // must add both location and locationRadius
-    // location is: latitude,longitude but comma is url-encoded --> %2C
-    searchUrl += '&location=' + latitude +'%2C'+ longitude;
-    searchUrl += '&locationRadius='+radius+unit;
+    // validate params before adding to search url
+    if(validLat(latitude)){
+      if(validLong(longitude)){
+        if(validRadius(radius, unit)){
+          // add geo params to search url
+          // must add both location and locationRadius
+          // location is: latitude,longitude but comma is url-encoded --> %2C
+          searchUrl += '&location=' + latitude +'%2C'+ longitude;
+          searchUrl += '&locationRadius='+radius+unit;
+        }
+      }
+    }
 
   }
 
@@ -66,19 +72,76 @@ $('#geo').click(function(){
   }
 });
 
-/////////////////////
-var validateLatLong = function(){
-  var regLat = new RegExp("^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}");
-
-  if( reg.exec(latitude) ) {
-   //do nothing
+// valid latitudes are values from -90 to 90
+var validLat = function(latitude){
+  if(isNumeric(latitude)){
+    if(-90 <= latitude && latitude <= 90){
+      return true;
+    }
+    else {
+      alert("Invalid latitude value. Please enter a number between -90 and 90. Search will be executed without geolocation filters.");
+      return false;
+    }
   } else {
-   //error
+    alert("Invalid latitude value. Please enter a number between -90 and 90. Search will be executed without geolocation filters.");
+    return false;
+  }
+}
+
+// valid longitudes are values from -180 to 180
+var validLong = function(longitude){
+  if(isNumeric(longitude)){
+    if(-180 <= longitude && longitude <= 180){
+      return true;
+    }
+    else {
+      alert("Invalid longitude value. Please enter a number between -180 and 180. Search will be executed without geolocation filters.");
+      return false;
+    }
+  } else {
+    alert("Invalid longitude value. Please enter a number between -180 and 180. Search will be executed without geolocation filters.");
+    return false;
+  }
+}
+
+// max allowable radius is 1000km
+var validRadius = function(radius, unit){
+  if(isNumeric(radius)){
+    if(radius < 0){
+      alert("Invalid radius. Please enter a non-negative number. Search will be executed without geolocation filters.");
+      return false;
+    }
+    else {
+      // convert to km and compare
+      switch(unit) {
+        case "m":
+          radius = radius * 0.001;
+          break;
+        case "ft":
+          radius = radius * 0.0003048;
+          break;
+        case "mi":
+          radius = radius * 1.60934;
+          break;
+      };
+
+      console.log("radius [" + radius + "] km.");
+      if (radius > 1000) {
+        alert("Radius exceeds maximum of 1000km. Please enter a smaller radius.  Search will be executed without geolocation filters.");
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+  } else {
+    alert("Invalid radius value. Radius must be numeric. Search will be executed without geolocation filters.");
+    return false;
   }
 
-  if( reg.exec(longitude) ) {
-   //do nothing
-  } else {
-   //error
-  }
+}
+
+// check if value is numeric
+function isNumeric(num) {
+  return !isNaN(parseFloat(num)) && isFinite(num);
 }
